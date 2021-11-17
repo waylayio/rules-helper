@@ -16,7 +16,10 @@
   },
   "dependencies": {
     "@waylay/client": "^2.37.0",
+    "ajv": "^8.8.1",
     "lodash": "^4.17.21",
-    "memoizee": "^0.4.15"
+    "memoizee": "^0.4.15",
+    "mustache": "^4.2.0",
+    "uuid": "^8.3.2"
   }
 }

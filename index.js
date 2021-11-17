@@ -2,6 +2,7 @@ const Waylay = require('@waylay/client')
 const { reduce, isEmpty } = require('lodash')
 
 const Chain = require('./chain')
+const Subflow = require('./subflow')
 
 const REQUIRED_PROPERTIES = ['domain', 'clientID', 'secret']
 
@@ -11,7 +12,7 @@ class Helper {
 
     if (!isEmpty(missingProperties)) throw Error(`missing certain properties ${missingProperties}`)
 
-    const { domain, clientID, secret } = options
+    const { domain, clientID, secret, config = {} } = options
 
     const waylay = new Waylay({
       domain,
@@ -20,6 +21,10 @@ class Helper {
     })
 
     this.chain = new Chain({ waylay })
+
+    if (!isEmpty(config)) {
+      this.subflow = new Subflow({ waylay, config })
+    }
   }
 }
 

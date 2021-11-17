@@ -1,4 +1,7 @@
-const Helper = require('../index')
+const { get } = require('lodash')
+const util = require('util')
+
+const Helper = require('../../index')
 
 const {
   CLIENT_ID,
@@ -68,13 +71,19 @@ async function start () {
   // addOrGate and addAndGate is also available which takes an array of steps which will be connected to the gate
 
   // when finished use this function to create the task on the domain with a name, second object are task properties
-  await builder.createTask('test sdk builder', {})
+  return builder.createTask('test sdk builder', {})
 }
 
 start()
-  .then(_ => {
+  .then(task => {
     console.log('successfully ran the example')
+    console.info(util.inspect(task, false, null, true))
   })
   .catch(err => {
-    console.error(err.response ? err.response.data : err, 'failed to run the example')
+    if (!err.isAxiosError) {
+      console.error(err)
+      return
+    }
+    const errData = get(err, 'response.data') || get(err, 'config')
+    console.error(util.inspect(errData, false, null, true))
   })
