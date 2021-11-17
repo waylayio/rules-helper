@@ -7,6 +7,7 @@
   "author": "lorenzo van de sijpe <lorenzo.vandesijpe@hotmail.nl>",
   "license": "MIT",
   "devDependencies": {
+    "husky": "^7.0.4",
     "standardx": "^7.0.0"
   },
   "dependencies": {
