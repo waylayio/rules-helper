@@ -6,6 +6,10 @@
   "repository": "git@github.com:waylayio/rules-helper.git",
   "author": "lorenzo van de sijpe <lorenzo.vandesijpe@hotmail.nl>",
   "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "yarn standardx"
+  },
   "devDependencies": {
     "husky": "^7.0.4",
     "standardx": "^7.0.0"
