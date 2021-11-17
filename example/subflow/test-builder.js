@@ -37,10 +37,8 @@ async function test () {
 
   builder.addStep(dummyStepStream)
   builder.addAndGate([dummyStep, dummyStep])
-  builder.removeStep()
-  builder.addStep(dummyActuator)
-
   // builder.removeStep()
+  builder.addStep(dummyActuator)
 
   return builder.createTask()
 }
