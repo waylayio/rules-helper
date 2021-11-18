@@ -33,21 +33,23 @@ class Subflow {
     return new Builder(options, this)
   }
 
-  async createTask (taskDefinition) {
+  async createTask (taskDefinition, options) {
     const validatedTask = await this._validateTask(taskDefinition)
 
     const { steps, name } = validatedTask
 
+    const enhancedSteps = this._addPluginsToSteps(steps)
+
     // link the wrapped plugins internally to each other
-    const pluginTriggers = this._createPluginTriggers(steps)
+    const pluginTriggers = this._createPluginTriggers(enhancedSteps)
 
     // link steps together
-    const stepTriggers = this._createStepTriggers(steps)
+    const stepTriggers = this._createStepTriggers(enhancedSteps)
 
     // create gate relationships
-    const stepRelations = this._createGateRelationships(steps)
+    const stepRelations = this._createGateRelationships(enhancedSteps)
 
-    const { sensors, actuators } = extractPlugins(steps)
+    const { sensors, actuators } = extractPlugins(enhancedSteps)
 
     const task = {
       sensors,
@@ -58,7 +60,8 @@ class Subflow {
         type: 'periodic',
         start: true,
         name: name,
-        pollingInterval: 900
+        pollingInterval: 900,
+        ...options
       }
     }
 
@@ -124,8 +127,7 @@ class Subflow {
     this._validateStepProperties(stepsWithPlugins)
 
     return {
-      ...task,
-      steps: stepsWithPlugins
+      ...task
     }
   }
 
