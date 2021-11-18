@@ -21,9 +21,9 @@ class Subflow {
   constructor (options) {
     this._validateConfig(options.config)
 
-    const { config } = options
+    const { config, waylay } = options
 
-    this.waylay = options.waylay
+    this.waylay = waylay
 
     this.config = [...defaultConfig, ...config] || {}
     this.builderConfig = [...config] || {}
