@@ -40,7 +40,7 @@ async function test () {
   // builder.removeStep()
   builder.addStep(dummyActuator)
 
-  // return builder.createTask()
+  return builder.createTask()
 }
 
 test()

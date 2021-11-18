@@ -17,8 +17,7 @@ const plugins = {
     if: {
       properties: {
         type: { const: 'sensor' }
-      },
-      required: ['type']
+      }
     },
     then: {
       properties: {
