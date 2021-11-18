@@ -34,9 +34,9 @@ class Subflow {
   }
 
   async createTask (taskDefinition, options) {
-    const validatedTask = await this._validateTask(taskDefinition)
+    await this._validateTask(taskDefinition)
 
-    const { steps, name } = validatedTask
+    const { steps, name } = taskDefinition
 
     const enhancedSteps = this._addPluginsToSteps(steps)
 
@@ -125,10 +125,6 @@ class Subflow {
 
     // check if the passed properties match the schema
     this._validateStepProperties(stepsWithPlugins)
-
-    return {
-      ...task
-    }
   }
 
   // check if every passed step has a config
