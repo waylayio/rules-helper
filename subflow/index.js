@@ -1,4 +1,4 @@
-const { reduce, isEmpty, map, find, last, first, includes, filter, chain, forEach, get, pick, startsWith, endsWith, isArray, findLastIndex } = require('lodash')
+const { reduce, isEmpty, map, find, last, first, includes, chain, forEach, get, pick, startsWith, endsWith, isArray, findLastIndex } = require('lodash')
 const Ajv = require('ajv')
 const Mustache = require('mustache')
 
@@ -11,11 +11,12 @@ const defaultConfig = require('./default.config')
 Mustache.escape = (text) => text
 Mustache.tags = ['<%', '%>']
 
-const validate = new Ajv()
+const validate = new Ajv({ allowUnionTypes: true })
 
 const validationSchemas = {}
 
 const validateConfigCompiled = validate.compile(require('./config.schema'))
+const validateStepsCompiled = validate.compile(require('./step.schema'))
 
 class Subflow {
   constructor (options) {
@@ -114,6 +115,14 @@ class Subflow {
   async _validateTask (task) {
     const { steps } = task
 
+    const isValid = validateStepsCompiled(steps)
+    const { errors } = validateStepsCompiled
+
+    if (!isValid && !isEmpty(errors)) {
+      const errorsParsed = map(errors, ({ message, instancePath }) => `${instancePath} ${message}`)
+      throw new Error(`steps validation failed ${errorsParsed}`)
+    }
+
     this._validateStepConfig(steps)
 
     this._validateStepTargets(steps)
@@ -153,20 +162,8 @@ class Subflow {
     if (!isEmpty(errors)) throw new Error(`failed to validate step targets: ${errors}`)
   }
 
-  /**
-   * only thing we are sure of during circular dependency check is that a leaf has no targets
-   * we can't assume we can start with the step where nobody points to because what if the circular dependency starts at that step
-   * example: 1 - 2 - 3 - 4 - 5 => here every node has a parent
-   * |_______________|
-   * example: 1 - 2 - 3 - 4 - 5 => here taking the node nobody points to would result in us starting and stopping at 5
-   * |___________|
-  **/
   _validateGraph (steps) {
-    const leafNodes = filter(steps, step => isEmpty(step.target))
-
-    if (isEmpty(leafNodes)) throw new Error('at least one node without a target required')
-
-    chain(leafNodes)
+    chain(steps)
       .map(({ id }) => validateStep(id))
       .flatten()
       .value()
@@ -200,9 +197,6 @@ class Subflow {
       // only gates can have multiple steps pointing at them
       if (parents.length > 1 && !isGate) throw new Error('only gates can have more then 1 step pointing to them')
 
-      // spread don't push! else the mutation will break the recursive check
-      children = [...children, id]
-
       // go over the parents and see if they were already verified as children
       forEach(parents, parentId => {
         // parent is already in the list as a child, this indicates circular dependency
@@ -215,6 +209,9 @@ class Subflow {
           throw new Error(`circular dependency detected from ${parentStep.id} to ${currentStep.id}`)
         }
       })
+
+      // spread don't push! else the mutation will break the recursive check
+      children = [...children, id]
 
       // go over each parent passing it the current child list
       return chain(parents)
@@ -249,7 +246,7 @@ class Subflow {
 
       const { errors } = validateF
 
-      if (!isValid && !isEmpty(errors)) acc = [...acc, ...map(errors, ({ message, instancePath }) => `step ${id} validation failed: properties${instancePath} ${message}`)]
+      if (!isValid && !isEmpty(errors)) acc = [...acc, ...map(errors, ({ message, instancePath }) => `step ${id} validation failed: properties ${instancePath} ${message}`)]
 
       return acc
     }, [])
