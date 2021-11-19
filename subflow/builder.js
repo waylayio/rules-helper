@@ -29,14 +29,18 @@ class Builder {
     this.client._validateStepProperties(updatedSteps)
 
     this.steps = updatedSteps
+
+    return this
   }
 
   addAndGate (steps) {
-    return this._addGate(steps, 'AND')
+    this._addGate(steps, 'AND')
+    return this
   }
 
   addOrGate (steps) {
-    return this._addGate(steps, 'OR')
+    this._addGate(steps, 'OR')
+    return this
   }
 
   _addGate (steps, type) {
@@ -75,6 +79,8 @@ class Builder {
           : step
       })
     })
+
+    return this
   }
 
   getSteps () {

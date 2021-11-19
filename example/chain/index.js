@@ -19,54 +19,53 @@ async function start () {
   // all sensors and actuators can be fetched through this function
   // const { sensors, actuators } = await client.getPlugins()
 
-  builder.addStep({
-    name: 'inRange',
-    type: 'sensor',
-    version: '1.0.2',
-    properties: {
-      value: '${task.streamData}' //eslint-disable-line
-    },
-    states: ['Above', 'In Range'],
-    dataTrigger: true,
-    tickTrigger: true
-  })
-
-  builder.addAndGate([
-    {
+  builder
+    .addStep({
       name: 'inRange',
       type: 'sensor',
       version: '1.0.2',
       properties: {
         value: '${task.streamData}' //eslint-disable-line
       },
-      states: ['Above'],
+      states: ['Above', 'In Range'],
       dataTrigger: true,
       tickTrigger: true
-    },
-    {
-      name: 'inRange',
-      type: 'sensor',
-      version: '1.0.2',
-      properties: {
-        value: '${task.streamData}' //eslint-disable-line
+    })
+    .addAndGate([
+      {
+        name: 'inRange',
+        type: 'sensor',
+        version: '1.0.2',
+        properties: {
+          value: '${task.streamData}' //eslint-disable-line
+        },
+        states: ['Above'],
+        dataTrigger: true,
+        tickTrigger: true
       },
-      states: ['In Range'],
+      {
+        name: 'inRange',
+        type: 'sensor',
+        version: '1.0.2',
+        properties: {
+          value: '${task.streamData}' //eslint-disable-line
+        },
+        states: ['In Range'],
+        dataTrigger: true,
+        tickTrigger: true
+      }
+    ])
+    .addStep({
+      name: 'mandrillMail',
+      type: 'sensor',
+      version: '1.1.1',
+      properties: {
+        from: 'test@waylay.io',
+        to: 'veselin@waylay.io'
+      },
       dataTrigger: true,
       tickTrigger: true
-    }
-  ])
-
-  builder.addStep({
-    name: 'mandrillMail',
-    type: 'sensor',
-    version: '1.1.1',
-    properties: {
-      from: 'test@waylay.io',
-      to: 'veselin@waylay.io'
-    },
-    dataTrigger: true,
-    tickTrigger: true
-  })
+    })
 
   // addOrGate and addAndGate is also available which takes an array of steps which will be connected to the gate
 

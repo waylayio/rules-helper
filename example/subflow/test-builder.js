@@ -35,10 +35,10 @@ async function test () {
     }
   }
 
-  builder.addStep(dummyStepStream)
-  builder.addAndGate([dummyStep, dummyStep])
-  // builder.removeStep()
-  builder.addStep(dummyActuator)
+  builder
+    .addStep(dummyStepStream)
+    .addAndGate([dummyStep, dummyStep])
+    .addStep(dummyActuator)
 
   return builder.createTask('subflow builder example test', {})
 }

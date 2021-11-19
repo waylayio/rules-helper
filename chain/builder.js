@@ -24,6 +24,8 @@ class Builder {
     if (isArray(step)) throw new Error('to push multiple steps please use the addAndGate or addOrGate')
     this._validateStep(step)
     this.steps.push({ ...(step.type === 'actuator' ? {} : STEP_DEFAULTS), label: `${step.name}_${this.steps.length}`, ...step })
+
+    return this
   }
 
   addOrGate (steps) {
@@ -31,6 +33,8 @@ class Builder {
     forEach(steps, this._validateStep)
     this.steps.push(map(steps, (step, index) => ({ ...(step.type === 'actuator' ? {} : STEP_DEFAULTS), label: `${step.name}_${this.steps.length}_${index}`, ...step })))
     this.steps.push({ type: 'gate', name: 'OR', label: `OR_${this.steps.length}`, states: ['TRUE'] })
+
+    return this
   }
 
   addAndGate (steps) {
@@ -38,6 +42,8 @@ class Builder {
     forEach(steps, this._validateStep)
     this.steps.push(map(steps, (step, index) => ({ ...(step.type === 'actuator' ? {} : STEP_DEFAULTS), label: `${step.name}_${this.steps.length}_${index}`, ...step })))
     this.steps.push({ type: 'gate', name: 'AND', label: `AND_${this.steps.length}`, states: ['TRUE'] })
+
+    return this
   }
 
   removeStep () {
@@ -53,6 +59,8 @@ class Builder {
     }
 
     this.steps = dropRight([...this.steps])
+
+    return this
   }
 
   async createTask (name, options) {
