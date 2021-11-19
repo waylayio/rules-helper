@@ -12,7 +12,7 @@ const {
 
 async function test () {
   const { subflow } = new Helper({ clientID: CLIENT_ID, secret: CLIENT_SECRET, domain: DOMAIN, config: exampleConfig })
-  const builder = subflow.createTaskBuilder({ name: 'subflow builder example test' })
+  const builder = subflow.createTaskBuilder()
 
   const dummyStepStream = {
     name: 'exit geofence',
@@ -40,7 +40,7 @@ async function test () {
   // builder.removeStep()
   builder.addStep(dummyActuator)
 
-  return builder.createTask()
+  return builder.createTask('subflow builder example test', {})
 }
 
 test()

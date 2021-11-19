@@ -3,13 +3,7 @@ const { checkIfObjectHasRequiredKeys } = require('./helper')
 const { v4: uuid } = require('uuid')
 
 class Builder {
-  constructor (options, client) {
-    checkIfObjectHasRequiredKeys(['name'])
-
-    const { name } = options
-
-    this.name = name
-
+  constructor (client) {
     this.steps = []
 
     this.client = client
@@ -87,11 +81,11 @@ class Builder {
     return this.steps
   }
 
-  async createTask () {
+  async createTask (name, options) {
     return this.client.createTask({
-      name: this.name,
+      name: name,
       steps: this.steps
-    })
+    }, options)
   }
 
   _validateStep (step) {

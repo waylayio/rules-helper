@@ -29,8 +29,8 @@ class Subflow {
     this.builderConfig = [...config] || {}
   }
 
-  createTaskBuilder (options) {
-    return new Builder(options, this)
+  createTaskBuilder () {
+    return new Builder(this)
   }
 
   async createTask (taskDefinition, options) {
