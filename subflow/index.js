@@ -34,10 +34,10 @@ class Subflow {
     return new Builder(this)
   }
 
-  async createTask (taskDefinition, options) {
+  async _preSave (taskDefinition) {
     await this._validateTask(taskDefinition)
 
-    const { steps, name } = taskDefinition
+    const { steps } = taskDefinition
 
     const enhancedSteps = this._addPluginsToSteps(steps)
 
@@ -52,11 +52,21 @@ class Subflow {
 
     const { sensors, actuators } = extractPlugins(enhancedSteps)
 
-    const task = {
+    return {
       sensors,
       actuators,
       relations: stepRelations,
-      triggers: [...pluginTriggers, ...stepTriggers],
+      triggers: [...pluginTriggers, ...stepTriggers]
+    }
+  }
+
+  async createTask (taskDefinition, options) {
+    const parsedDefinition = await this._preSave(taskDefinition)
+
+    const { name } = taskDefinition
+
+    const task = {
+      ...parsedDefinition,
       task: {
         type: 'periodic',
         start: true,
@@ -67,6 +77,19 @@ class Subflow {
     }
 
     return this.waylay.tasks.create(task)
+  }
+
+  async createTemplate (taskDefinition) {
+    const parsedDefinition = await this._preSave(taskDefinition)
+
+    const { name } = taskDefinition
+
+    const task = {
+      ...parsedDefinition,
+      name
+    }
+
+    return this.waylay.templates.create(task)
   }
 
   getPlugins () {

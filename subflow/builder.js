@@ -98,6 +98,13 @@ class Builder {
     }, options)
   }
 
+  async createTemplate (name) {
+    return this.client.createTemplate({
+      name: name,
+      steps: this.steps
+    })
+  }
+
   _validateStep (step) {
     checkIfObjectHasRequiredKeys(step, ['name', 'properties'])
   }
