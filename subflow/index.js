@@ -383,24 +383,20 @@ class Subflow {
       }
 
       const templatedProperties = reduce(pluginProperties, (acc, val, key) => {
-        let newVal = val
+        let newVal = typeof val === 'string' ? Mustache.render(val, context) : val
 
-        if (typeof val === 'string') {
-          newVal = Mustache.render(val, context)
+        const isParseable = startsWith(val, '<%') && endsWith(val, '%>')
 
-          const isParseable = startsWith(val, '<%') && endsWith(val, '%>')
+        if (isParseable) {
+          const parsingType = get(configProperties, `${val.replace('<%', '').replace('%>', '').replace('properties.', '')}.type`)
 
-          if (isParseable) {
-            const parsingType = get(configProperties, `${val.replace('<%', '').replace('%>', '').replace('properties.', '')}.type`)
-
-            if (!isArray(parsingType)) {
-              switch (parsingType) {
-                case 'number': {
-                  newVal = Number(newVal)
-                  break
-                }
-                default: break
+          if (!isArray(parsingType)) {
+            switch (parsingType) {
+              case 'number': {
+                newVal = Number(newVal)
+                break
               }
+              default: break
             }
           }
         }
