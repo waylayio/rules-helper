@@ -1,6 +1,6 @@
 {
   "name": "@waylay/rules-helper",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "javascript helper code to create waylay.io rules",
   "main": "index.js",
   "repository": "git@github.com:waylayio/rules-helper.git",
