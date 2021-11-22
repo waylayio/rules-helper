@@ -10,6 +10,9 @@
     "prepare": "husky install",
     "test": "yarn standardx"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "husky": "^7.0.4",
     "standardx": "^7.0.0"
