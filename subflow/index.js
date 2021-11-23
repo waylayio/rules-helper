@@ -417,8 +417,6 @@ class Subflow {
 
       const { properties: configProperties } = find(this.config, config => config.name === stepName)
 
-      if (isEmpty(pluginProperties)) return [...updatedPlugins, plugin]
-
       let context = {
         properties: stepProperties
       }
@@ -432,34 +430,37 @@ class Subflow {
         }
       }
 
-      const templatedProperties = reduce(pluginProperties, (acc, val, key) => {
-        let newVal = typeof val === 'string' ? Mustache.render(val, context) : val
-
-        const isParseable = startsWith(val, '<%') && endsWith(val, '%>')
-
-        if (isParseable) {
-          const parsingType = get(configProperties, `${val.replace('<%', '').replace('%>', '').replace('properties.', '')}.type`)
-
-          if (!isArray(parsingType)) {
-            switch (parsingType) {
-              case 'number': {
-                newVal = Number(newVal)
-                break
-              }
-              default: break
-            }
-          }
-        }
-
-        acc[key] = newVal
-        return acc
-      }, {})
-
       return [...updatedPlugins, {
-        ...plugin,
-        properties: templatedProperties
+        ...this._templateObject(plugin, context, configProperties),
+        properties: this._templateObject(pluginProperties, context, configProperties)
       }]
     }, [])
+  }
+
+  _templateObject (object, context, configProperties) {
+    return reduce(object, (acc, val, key) => {
+      let newVal = typeof val === 'string' ? Mustache.render(val, context) : val
+
+      const isParseable = startsWith(val, '<%') && endsWith(val, '%>')
+
+      if (isParseable) {
+        const parsingType = get(configProperties, `${val.replace('<%', '').replace('%>', '').replace('properties.', '')}.type`)
+
+        if (!isArray(parsingType)) {
+          switch (parsingType) {
+            case 'number': {
+              newVal = Number(newVal)
+              break
+            }
+            default: break
+          }
+        }
+      }
+
+      acc[key] = newVal
+
+      return acc
+    }, {})
   }
 }
 

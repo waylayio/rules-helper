@@ -29,6 +29,9 @@ const plugins = {
           items: {
             type: 'string'
           }
+        },
+        resource: {
+          type: 'string'
         }
       },
       required: [
