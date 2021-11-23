@@ -102,55 +102,20 @@ A step consists of 2 parts, the name of the subflow you want to use for the step
 }
 ```
 
-#### Get al configured subflows
-```javascript
-getSubflows()
-```
-Gives you a list of all configured subflows.
+#### Functions
 
-#### Add step
-```javascript
-addStep(step)
-```
-Adds the step at the end of the currently configured steps.
+|function|   |async|
+|---|---|---|
+|getSubflows()|Gives you a list of all configured subflows.|No|
+|addStep(step)|Adds the step at the end of the currently configured steps.|No|
+|addAndGate([step])|Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical AND gate.|No|
+|addOrGate([step])|Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical OR gate.|No|
+|removeStep()|Removes the last configured step, if the last one was a gate step, it will remove all those steps.|No|
+|getSteps()|Gives back all currently configured steps.|No|
+|createTask(name, options)|Creates a task on the waylay engine, you should pass a name to the task. In the options you can pass all options that are available on a task (docs link to be added)|Yes|
+|createTemplate(name)|Creates a template on the waylay engine. You should pass a name to the template.|Yes|
 
-#### Add steps with AND gate
-```javascript
-addAndGate([step])
-```
-Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical AND gate.
-
-#### Add steps with OR gate
-```javascript
-addOrGate([step])
-```
-Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical OR gate.
-
-#### Remove the last configured step
-```javascript
-removeStep()
-```
-Removes the last configured step, if the last one was a gate step, it will remove all those steps.
-
-#### Get all configured steps
-```javascript
-getSteps()
-```
-Gives back all currently configured steps.
-
-#### Create a task (Async)
-```javascript
-createTask(name, options)
-```
-Creates a task on the waylay engine, you should pass a name to the task. In the options you can pass all options that are available on a task (docs link to be added)
-
-#### create a template (Async)
-```javascript
-createTemplate(name)
-```
-Creates a template on the waylay engine. You should pass a name to the template.
-
-All these steps can be chained after one another
+All these functions can be chained after one another
 ```javascript
 builder
     .addStep(dummyStepStream)
@@ -202,32 +167,12 @@ The steps of the chain builder adhere to the waylay format of plugins.
 }
 ```
 
-#### Add step
-```javascript
-addStep(step)
-```
-Adds the step at the end of the currently configured steps.
+#### Functions
 
-#### Add steps with AND gate
-```javascript
-addAndGate([step])
-```
-Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical AND gate.
-
-#### Add steps with OR gate
-```javascript
-addOrGate([step])
-```
-Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical OR gate.
-
-#### Remove the last configured step
-```javascript
-removeStep()
-```
-Removes the last configured step, if the last one was a gate step, it will remove all those steps.
-
-#### Create a task (Async)
-```javascript
-createTask(name, options)
-```
-Creates a task on the waylay engine, you should pass a name to the task. In the options you can pass all options that are available on a task (docs link to be added)
+|function|   |async|
+|---|---|---|
+|addStep(step)|Adds the step at the end of the currently configured steps.|No|
+|addAndGate([step])|Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical AND gate.|No|
+|addOrGate([step])|Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical OR gate.|No|
+|removeStep()|Removes the last configured step, if the last one was a gate step, it will remove all those steps.|No|
+|createTask(name, options)|Creates a task on the waylay engine, you should pass a name to the task. In the options you can pass all options that are available on a task (docs link to be added)|Yes|
