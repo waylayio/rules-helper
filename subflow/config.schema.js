@@ -53,6 +53,12 @@ module.exports = {
       name: { type: 'string' },
       description: { type: 'string' },
       properties: { type: 'object' },
+      tags: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      },
       plugins: plugins
     },
     required: ['name', 'description'],

@@ -1,4 +1,4 @@
-const { reduce, isEmpty, map, find, last, first, includes, chain, forEach, get, pick, startsWith, endsWith, isArray, findLastIndex } = require('lodash')
+const { reduce, isEmpty, map, find, last, first, includes, chain, forEach, get, pick, startsWith, endsWith, isArray, findLastIndex, filter, some, every, uniqBy } = require('lodash')
 const Ajv = require('ajv')
 const Mustache = require('mustache')
 
@@ -92,9 +92,36 @@ class Subflow {
     return this.waylay.templates.create(task)
   }
 
-  getPlugins () {
-    return map(this.config, config => {
-      return pick(config, ['name', 'description', 'properties'])
+  getPlugins (query, config) {
+    let pluginsToUse = config || this.config
+
+    if (!isEmpty(query)) {
+      const { AND = [], OR = [] } = query
+
+      if (!isArray(AND) || !isArray(OR)) throw new Error('AND / OR query should be an array of strings')
+
+      const orPlugins = filter(this.config, config => {
+        if (isEmpty(config.tags)) return false
+        return some(OR, tagToCheck => {
+          return includes(config.tags || [], tagToCheck)
+        })
+      })
+
+      // lodash every returns true if you check agains empty array so need to make sure we don't filter when no AND is supplied
+      const andPlugins = isEmpty(AND)
+        ? []
+        : filter(this.config, config => {
+          if (isEmpty(config.tags)) return false
+          return every(AND, tagToCheck => {
+            return includes(config.tags || [], tagToCheck)
+          })
+        })
+
+      pluginsToUse = uniqBy([...orPlugins, ...andPlugins], plugin => plugin.name)
+    }
+
+    return map(pluginsToUse, config => {
+      return pick(config, ['name', 'description', 'properties', 'tags'])
     })
   }
 

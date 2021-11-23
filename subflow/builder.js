@@ -1,4 +1,4 @@
-const { isEmpty, last, dropRight, map, includes, isArray, forEach, filter, pick } = require('lodash')
+const { isEmpty, last, dropRight, map, includes, isArray, forEach, filter } = require('lodash')
 const { checkIfObjectHasRequiredKeys } = require('./helper')
 const { v4: uuid } = require('uuid')
 
@@ -87,8 +87,8 @@ class Builder {
     return this.steps
   }
 
-  getPlugins () {
-    return map(this.client.builderConfig, config => ({ ...pick(config, ['name', 'description', 'properties']) }))
+  getPlugins (query) {
+    return this.client.getPlugins(query, this.client.builderConfig)
   }
 
   async createTask (name, options) {
