@@ -72,7 +72,7 @@ a keyword that's always available is *<%previousNode%>*. This way you can access
 ]
 ```
 
-### Init
+### Setting up the package
 
 To use the subflow part of the waylay task-helper, you need to setup the waylay helper with the clientId, secret and domain of your waylay instance. The config is the array of subflows as configured above.
 
@@ -84,7 +84,7 @@ const { subflow } = new Helper({ clientID: CLIENT_ID, secret: CLIENT_SECRET, dom
 
 ### Builder
 
-#### Init
+#### Starting the builder
 To use the builder you need to create a subflow builder instance.
 ```javascript
 const builder = subflow.createTaskBuilder()
@@ -163,8 +163,8 @@ builder
 
 The chain builder is the most straight forward one to use seeing as it doesn't need a config to work. The downside to this is that more Waylay logic will have to be applied as a user / through the UX.
 
-### Init
-To use the chain part of the waylay task-helper, you need to setup the waylay helper with the clientId, secret and domain of your waylay instance.
+### Setting up the package
+To use the chain part of the waylay task-helper, you need to setup the waylay helper with the clientId, secret and domain of your waylay instance. The chain part of the task-helper doesn't require a configuration.
 
 ```javascript
 const Helper = require('@waylay/rules-helper')
@@ -180,10 +180,26 @@ const { sensors, actuators } = await chain.getPlugins()
 ```
 Returns a list of all plugins active on your waylay instance. seperated into the categories sensors and actuators.
 
-#### Init
+#### Starting the builder
 To use the builder you need to create a chain builder instance.
 ```javascript
 const builder = chain.createBuilder()
+```
+
+#### Step
+The steps of the chain builder adhere to the waylay format of plugins.
+```javascript
+{
+    name: 'inRange',
+    type: 'sensor',
+    version: '1.0.2',
+    properties: {
+        value: '${task.streamData}'
+    },
+    states: ['Above', 'In Range'],
+    dataTrigger: true,
+    tickTrigger: true
+}
 ```
 
 #### Add step
