@@ -74,7 +74,7 @@ a keyword that's always available is *<%previousNode%>*. This way you can access
 
 ### Init
 
-To use the subflow part of the waylay task-helper, you need to setup the waylay helper with the clientId, secret and domain of your waylay instance.
+To use the subflow part of the waylay task-helper, you need to setup the waylay helper with the clientId, secret and domain of your waylay instance. The config is the array of subflows as configured above.
 
 ```javascript
 const Helper = require('@waylay/rules-helper')
