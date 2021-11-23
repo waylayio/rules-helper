@@ -92,7 +92,7 @@ class Subflow {
     return this.waylay.templates.create(task)
   }
 
-  getPlugins (query, config) {
+  getSubflows (query, config) {
     let pluginsToUse = config || this.config
 
     if (!isEmpty(query)) {

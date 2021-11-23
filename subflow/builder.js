@@ -87,8 +87,8 @@ class Builder {
     return this.steps
   }
 
-  getPlugins (query) {
-    return this.client.getPlugins(query, this.client.builderConfig)
+  getSubflows (query) {
+    return this.client.getSubflows(query, this.client.builderConfig)
   }
 
   async createTask (name, options) {
