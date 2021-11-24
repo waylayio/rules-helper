@@ -444,12 +444,16 @@ class Subflow {
       const isParseable = startsWith(val, '<%') && endsWith(val, '%>')
 
       if (isParseable) {
-        const parsingType = get(configProperties, `${val.replace('<%', '').replace('%>', '').replace('properties.', '')}.type`)
-
+        const valueName = val.replace('<%', '').replace('%>', '').replace('properties.', '')
+        const parsingType = get(configProperties, `${valueName}.type`)
         if (!isArray(parsingType)) {
           switch (parsingType) {
             case 'number': {
               newVal = Number(newVal)
+              break
+            }
+            case 'object': {
+              newVal = get(context, `properties.${valueName}`, newVal)
               break
             }
             default: break
