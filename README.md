@@ -176,3 +176,13 @@ The steps of the chain builder adhere to the waylay format of plugins.
 |addOrGate([step])|Adds the steps passed to the function at the end of the currently configured steps. It will combine them in a logical OR gate.|No|
 |removeStep()|Removes the last configured step, if the last one was a gate step, it will remove all those steps.|No|
 |createTask(name, options)|Creates a task on the waylay engine, you should pass a name to the task. In the options you can pass all options that are available on a task (docs link to be added)|Yes|
+|createTemplate(name)|Creates a template on the waylay engine. You should pass a name to the template.|Yes|
+
+All these functions can be chained after one another
+```javascript
+builder
+    .addStep(step)
+    .addAndGate([step, step])
+    .addStep(step)
+    .createTask('chain builder example test', {})
+```

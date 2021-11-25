@@ -63,10 +63,10 @@ class Builder {
     return this
   }
 
-  async createTask (name, options) {
+  _preSave () {
     const position = [-100, 0]
 
-    const task = reduce(this.steps, (acc, step, index) => {
+    return reduce(this.steps, (acc, step, index) => {
       const { sensors, actuators, triggers, relations } = acc
 
       position[1] = 150
@@ -117,15 +117,30 @@ class Builder {
 
       return acc
     }, { ...TASK_DEFAULT })
+  }
+
+  async createTask (name, options) {
+    const parsedDefinition = this._preSave()
 
     return this.waylay.tasks.create({
-      ...task,
+      ...parsedDefinition,
       task: {
         ...TASK_OPTIONS_DEFAULT,
         name,
         ...options
       }
     })
+  }
+
+  async createTemplate (name) {
+    const parsedDefinition = this._preSave()
+
+    const task = {
+      ...parsedDefinition,
+      name
+    }
+
+    return this.waylay.templates.create(task)
   }
 
   _validateStep (step) {
