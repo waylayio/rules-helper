@@ -61,7 +61,7 @@ module.exports = [
       version: '1.1.0',
       type: 'sensor',
       properties: {
-        condition: '${<%previousNode%>.rawData.engine_idle === true',
+        condition: '${<%previousNode%>.rawData.engine_idle} === true',
       },
       dataTrigger: false,
       tickTrigger: false,
@@ -96,7 +96,7 @@ module.exports = [
       version: '1.1.0',
       type: 'sensor',
       properties: {
-        condition: '${<%previousNode%>.rawData.speed === 0',
+        condition: '${<%previousNode%>.rawData.speed} === 0',
       },
       dataTrigger: false,
       tickTrigger: false,

@@ -1,6 +1,6 @@
 const { isEmpty, last, dropRight, map, includes, isArray, forEach, filter } = require('lodash')
 const { checkIfObjectHasRequiredKeys } = require('./helper')
-const { v4: uuid } = require('uuid')
+const uniqid = require('uniqid')
 
 class Builder {
   constructor (client) {
@@ -17,7 +17,7 @@ class Builder {
 
     if (!configStep) throw new Error(`no step setup in config with name ${name}`)
 
-    const newStep = { ...step, id: uuid() }
+    const newStep = { ...step, id: uniqid() }
 
     const prevStep = last(this.steps)
 
@@ -45,10 +45,10 @@ class Builder {
 
   _addGate (steps, type) {
     const prevStep = last(this.steps)
-    const andGate = { name: type, id: uuid() }
+    const andGate = { name: type, id: uniqid() }
     const newSteps = map(steps, step => {
       this._validateStep(step)
-      const newStep = { ...step, id: uuid(), target: [andGate.id] }
+      const newStep = { ...step, id: uniqid(), target: [andGate.id] }
       if (!isEmpty(prevStep)) prevStep.target = isArray(prevStep.target) ? prevStep.target = [...prevStep.target, newStep.id] : prevStep.target = [newStep.id]
       return newStep
     })

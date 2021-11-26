@@ -14,7 +14,7 @@ const {
 async function test () {
   const { subflow } = new Helper({ clientID: CLIENT_ID, secret: CLIENT_SECRET, domain: DOMAIN, config: exampleConfig })
 
-  return subflow.createTask({ name: 'subflow example test', steps: exampleInput })
+  return subflow.createTemplate({ name: 'subflow example test', steps: exampleInput })
 }
 
 test()

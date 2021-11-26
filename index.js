@@ -3,6 +3,7 @@ const { reduce, isEmpty } = require('lodash')
 
 const Chain = require('./chain')
 const Subflow = require('./subflow')
+const Playbook = require('./playbook')
 
 const REQUIRED_PROPERTIES = ['domain', 'clientID', 'secret']
 
@@ -21,6 +22,8 @@ class Helper {
     })
 
     this.chain = new Chain({ waylay })
+
+    this.playbook = new Playbook({ waylay })
 
     if (!isEmpty(config)) {
       this.subflow = new Subflow({ waylay, config })
